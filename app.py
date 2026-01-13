@@ -37,23 +37,40 @@ def add_flashcard():
     try:
         with open("flashcard.json","r",encoding="utf-8") as file:
             data=json.load(file)
-            if not isinstance(data,list):
-                data=[]
+            if not data:
+                print("No flashcard yet.")
     except FileNotFoundError:
-        data=[]
+        print("File not found.")
 
     data.append(flashcard.to_dict())
 
     with open("flashcard.json","w",encoding="utf-8") as file:
         json.dump(data,file,indent=4,ensure_ascii=False)
 
-    print(f"Flashcard {flashcard.info()} added successfully!")
+    print(f"Flashcard added successfully!")
+
+def show_all():
+    try:
+        with open("flashcard.json","r",encoding="utf-8") as file:
+            data=json.load(file)
+            if not data:
+                print("No flashcard yet.")
+
+            print("Showing all your flashcards...")
+            for f in data:
+                flashcard=Flashcard(f["side1"],f["side2"])
+                print(f"{f["side1"]} - {f["side2"]}")
+
+    except FileNotFoundError:
+        print("File not found.")
+
 
 def main():
     while True:
         print()
         print("=== FLASHCARD ===")
         print("1. Add flashcard")
+        print("2. Show all flashcards")
         print("2. Exit")
         print()
 
@@ -61,7 +78,9 @@ def main():
 
         if choice=="1":
             add_flashcard()
-        elif chocie=="2":
+        elif choice=="2":
+            show_all()
+        elif choice=="3":
             break
         else:
             print("Invalid option. Try again! \n")
