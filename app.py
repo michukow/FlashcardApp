@@ -14,7 +14,7 @@ class Flashcard:
 def add_flashcard():
     while True:
         try:
-            side1=input("Insert first side of the flashcard: ")
+            side1=input("Insert first side of the flashcard [foreign or word to learn]: ")
             if side1=="":
                 print("The flashcard can not be empty.")
                 continue
@@ -24,7 +24,7 @@ def add_flashcard():
 
     while True:
         try:
-            side2=input("Insert second side of the flashcard: ")
+            side2=input("Insert second side of the flashcard [native or explanation]: ")
             if side2=="":
                 print("The flashcard can not be empty.")
                 continue
@@ -57,9 +57,9 @@ def show_all():
                 print("No flashcard yet.")
 
             print("Showing all your flashcards...")
-            for f in data:
+            for i,f in enumerate(data,start=1):
                 flashcard=Flashcard(f["side1"],f["side2"])
-                print(f"{f["side1"]} - {f["side2"]}")
+                print(f"{i}. {f["side1"]} - {f["side2"]}")
 
     except FileNotFoundError:
         print("File not found.")
