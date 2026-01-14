@@ -94,6 +94,56 @@ def delete():
     except FileNotFoundError:
         print("File not found.")
 
+def update():
+    try:
+        with open("flashcard.json","r",encoding="utf-8") as file:
+            data=json.load(file)
+
+        if not data:
+            print("No flashcard yet.")
+            return
+
+        for i,f in enumerate(data,start=1):
+            flashcard=Flashcard(f["side1"],f["side2"])
+            print(f"{i}. {f["side1"]} - {f["side2"]}")
+            
+
+        while True:
+            try:
+                i=int(input("Enter number of flashcard to edit: "))-1
+                if i<0 or i>=len(data):
+                    print("Invalid number. Try again.")
+                    continue
+                break
+            except ValueError:
+                print("Please enter a number.")
+
+        old=data[i]
+
+        new_side1=input("Update first side of flashcard: ")
+        if new_side1!="":
+            try:
+                old["side1"]=new_side1
+            except ValueError:
+                print("An error occured.")
+                return
+
+        new_side2=input("Update second side of flashcard: ")
+        if new_side2!="":
+            try:
+                old["side2"]=new_side2
+            except ValueError:
+                print("An error occured.")
+                return
+
+        with open("flashcard.json","w",encoding="utf-8") as file:
+            json.dump(data,file,indent=4,ensure_ascii=False)
+
+        print("Flashcard updated.")
+
+    except FileNotFoundError:
+        print("File not found.")        
+
 def main():
     while True:
         print()
@@ -101,7 +151,8 @@ def main():
         print("1. Add flashcard")
         print("2. Show all flashcards")
         print("3. Delete specific flashcard")
-        print("4. Exit")
+        print("4. Update specific flashcard")
+        print("5. Exit")
         print()
 
         choice=str(input("Choose option: "))
@@ -113,6 +164,8 @@ def main():
         elif choice=="3":
             delete()
         elif choice=="4":
+            update()
+        elif choice=="5":
             break
         else:
             print("Invalid option. Try again! \n")
