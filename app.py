@@ -8,9 +8,6 @@ class Flashcard:
     def to_dict(self):
         return self.__dict__
 
-    def info(self):
-        return self.side1, self.side2
-
 def add_flashcard():
     while True:
         try:
@@ -64,6 +61,38 @@ def show_all():
     except FileNotFoundError:
         print("File not found.")
 
+def delete():
+    try:
+        with open("flashcard.json","r",encoding="utf-8") as file:
+            data=json.load(file)
+
+        if not data:
+            print("No flashcards yet.")
+            return
+
+        for i,f in enumerate(data,start=1):
+            flashcard=Flashcard(f["side1"],f["side2"])
+            print(f"{i}. {f["side1"]} - {f["side2"]}")
+
+        while True:
+            try:
+                i=int(input("Enter number of flashcard to delete "))-1
+                if i<0 or i>=len(data):
+                    print("Invalid number. Try again.")
+                    continue
+                break
+            except ValueError:
+                print("Please enter a number.")
+
+        removed=data.pop(i)
+
+        with open("flashcard.json","w",encoding="utf-8") as file:
+            json.dump(data,file,indent=4,ensure_ascii=False)
+
+        print("Flashcard was removed.")
+
+    except FileNotFoundError:
+        print("File not found.")
 
 def main():
     while True:
@@ -71,7 +100,8 @@ def main():
         print("=== FLASHCARD ===")
         print("1. Add flashcard")
         print("2. Show all flashcards")
-        print("2. Exit")
+        print("3. Delete specific flashcard")
+        print("4. Exit")
         print()
 
         choice=str(input("Choose option: "))
@@ -81,6 +111,8 @@ def main():
         elif choice=="2":
             show_all()
         elif choice=="3":
+            delete()
+        elif choice=="4":
             break
         else:
             print("Invalid option. Try again! \n")
