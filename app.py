@@ -12,7 +12,7 @@ class Flashcard:
 def add_flashcard():
     while True:
         try:
-            side1=input("Insert first side of the flashcard [foreign or word to learn]: ")
+            side1=input("Insert first side of the flashcard [native or explanation]: ")
             if side1=="":
                 print("The flashcard can not be empty.")
                 continue
@@ -22,7 +22,7 @@ def add_flashcard():
 
     while True:
         try:
-            side2=input("Insert second side of the flashcard [native or explanation]: ")
+            side2=input("Insert second side of the flashcard [new word or expression]: ")
             if side2=="":
                 print("The flashcard can not be empty.")
                 continue
@@ -148,6 +148,7 @@ def update():
 def learn():
     print("Learning...")
     good=0
+    max_flashcards=0
     motivation_good=["Well done!","Just do it!", "You've got this!","Congratulation!","Good job!"]
     motivation_bad=["Bad!","Remember this!","Error!","Repeat that!"]
     flashcards_to_learn={}
@@ -162,6 +163,7 @@ def learn():
             for f in data:
                 flashcard=Flashcard(f["side1"],f["side2"])
                 flashcards_to_learn[f["side1"]]=f["side2"]
+                max_flashcards=len(flashcards_to_learn)
 
     except FileNotFoundError:
         print("File not found.")
@@ -178,9 +180,12 @@ def learn():
 
         else:
             print(random.choice(motivation_bad))
-            print(f"{side1} - {side2}\n")
+            print(f"Correct answer: {side1} - {side2}\n")
 
-    print("Wow! You've done it!")   
+    print("Wow! You've done it!")
+    print(f"Total: {max_flashcards}") 
+    print(f"Correct: {good}")
+    print(f"Wrong: {max_flashcards-good}")  
 
 def main():
     while True:
