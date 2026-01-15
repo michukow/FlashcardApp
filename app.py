@@ -1,4 +1,5 @@
 import json
+import random
 
 class Flashcard:
     def __init__(self,side1,side2):
@@ -142,7 +143,44 @@ def update():
         print("Flashcard updated.")
 
     except FileNotFoundError:
-        print("File not found.")        
+        print("File not found.")   
+
+def learn():
+    print("Learning...")
+    good=0
+    motivation_good=["Well done!","Just do it!", "You've got this!","Congratulation!","Good job!"]
+    motivation_bad=["Bad!","Remember this!","Error!","Repeat that!"]
+    flashcards_to_learn={}
+    try:
+        with open("flashcard.json","r",encoding="utf-8") as file:
+            data=json.load(file)
+
+            if not data:
+                print("No flashcard yet")
+                return
+
+            for f in data:
+                flashcard=Flashcard(f["side1"],f["side2"])
+                flashcards_to_learn[f["side1"]]=f["side2"]
+
+    except FileNotFoundError:
+        print("File not found.")
+
+    while flashcards_to_learn:
+        side1,side2=random.choice(list(flashcards_to_learn.items()))
+        answer=input(f"{side1}: ")
+
+        if answer.lower()==side2.lower():
+            good+=1
+            print(random.choice(motivation_good))
+            print(f"{side1} - {side2}\n")
+            flashcards_to_learn.pop(side1)
+
+        else:
+            print(random.choice(motivation_bad))
+            print(f"{side1} - {side2}\n")
+
+    print("Wow! You've done it!")   
 
 def main():
     while True:
@@ -152,7 +190,8 @@ def main():
         print("2. Show all flashcards")
         print("3. Delete specific flashcard")
         print("4. Update specific flashcard")
-        print("5. Exit")
+        print("5. Repeat everything")
+        print("6. Exit")
         print()
 
         choice=str(input("Choose option: "))
@@ -166,6 +205,8 @@ def main():
         elif choice=="4":
             update()
         elif choice=="5":
+            learn()
+        elif choice=="6":
             break
         else:
             print("Invalid option. Try again! \n")
