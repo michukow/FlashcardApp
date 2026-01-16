@@ -1,14 +1,12 @@
 [
     {
-        "side1": "Dog",
-        "side2": "Pies"
+        "side1": "pies",
+        "side2": "dog",
+        "date": "2026-01-16 19:08:59"
     },
     {
-        "side1": "Lion",
-        "side2": "Lew"
-    },
-    {
-        "side1": "Carrot",
-        "side2": "marchewka"
+        "side1": "kot",
+        "side2": "cat",
+        "date": "2026-01-16 19:09:49"
     }
 ]
