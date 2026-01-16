@@ -3,10 +3,11 @@ import random
 from datetime import datetime
 
 class Flashcard:
-    def __init__(self,side1,side2,date):
+    def __init__(self,side1,side2,date,learned="n"):
         self.side1=side1
         self.side2=side2
         self.date=date
+        self.learned=learned
 
     def to_dict(self):
         return self.__dict__
@@ -14,7 +15,7 @@ class Flashcard:
 def add_flashcard():
     while True:
         try:
-            side1=input("Insert first side of the flashcard [native or explanation]: ")
+            side1=input("Insert first side of the flashcard [native]: ")
             if side1=="":
                 print("The flashcard can not be empty.")
                 continue
@@ -24,7 +25,7 @@ def add_flashcard():
 
     while True:
         try:
-            side2=input("Insert second side of the flashcard [new word or expression]: ")
+            side2=input("Insert second side of the flashcard [new word]: ")
             if side2=="":
                 print("The flashcard can not be empty.")
                 continue
@@ -60,7 +61,7 @@ def show_all():
 
             print("Showing all your flashcards...")
             for i,f in enumerate(data,start=1):
-                flashcard=Flashcard(f["side1"],f["side2"],f["date"])
+                flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
                 print(f"{i}. {f["side1"]} - {f["side2"]}")
 
     except FileNotFoundError:
@@ -76,7 +77,7 @@ def delete():
             return
 
         for i,f in enumerate(data,start=1):
-            flashcard=Flashcard(f["side1"],f["side2"],f["date"])
+            flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
             print(f"{i}. {f["side1"]} - {f["side2"]}")
 
         while True:
@@ -109,7 +110,7 @@ def update():
             return
 
         for i,f in enumerate(data,start=1):
-            flashcard=Flashcard(f["side1"],f["side2"],f["date"])
+            flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
             print(f"{i}. {f["side1"]} - {f["side2"]}")
             
 
@@ -153,11 +154,10 @@ def update():
         print("File not found.")   
 
 def exam_mode():
-    print("Learning...")
     good=0
     max_flashcards=0
     motivation_good=["Well done!","Just do it!", "You've got this!","Congratulation!","Good job!"]
-    motivation_bad=["Bad!","Remember this!","Error!","Repeat that!"]
+    motivation_bad=["Bad!","Remember this!","Error!","Nice try!","Repeat that!"]
     flashcards_exam={}
     try:
         with open("flashcard.json","r",encoding="utf-8") as file:
@@ -168,7 +168,7 @@ def exam_mode():
                 return
 
             for f in data:
-                flashcard=Flashcard(f["side1"],f["side2"],f["date"])
+                flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
                 flashcards_exam[f["side1"]]=f["side2"]
                 max_flashcards=len(flashcards_exam)
 
@@ -194,6 +194,44 @@ def exam_mode():
     print(f"Correct: {good}")
     print(f"Wrong: {max_flashcards-good}")
 
+def learn_mode():
+    learning_pile=[]
+    try:
+        with open("flashcard.json","r",encoding="utf-8") as file:
+            data=json.load(file)
+
+            if not data:
+                print("No flashcard yet")
+                return
+
+            for f in data:
+                flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
+                learning_pile.append(flashcard)
+
+    except FileNotFoundError:
+        print("File not found.")
+
+    while learning_pile:
+
+        card=learning_pile.pop(0)
+        side1=card.side1
+        side2=card.side2
+
+        print(f"\n{side1}")
+        input("Press ENTER to show answer...")
+
+        print(f"{side2}")
+
+        answer=input(f"Do you know the answer? [y/n]: ").lower()
+
+    while answer not in ("y","n"):
+        answer=input("Type 'y' or 'n': ").lower()
+
+        if answer=="n":
+            learning_pile.append(card)
+
+    print("\nWow! You've repeated every flashcard.")
+
 def main():
     while True:
         print()
@@ -202,8 +240,9 @@ def main():
         print("2. Show all flashcards")
         print("3. Delete specific flashcard")
         print("4. Update specific flashcard")
-        print("5. Exam")
-        print("6. Exit")
+        print("5. Learn mode")
+        print("6. Exam")
+        print("7. Exit")
         print()
 
         choice=str(input("Choose option: "))
@@ -217,8 +256,10 @@ def main():
         elif choice=="4":
             update()
         elif choice=="5":
-            exam_mode()
+            learn_mode()
         elif choice=="6":
+            exam_mode()
+        elif choice=="7":
             break
         else:
             print("Invalid option. Try again! \n")
