@@ -224,11 +224,11 @@ def learn_mode():
 
         answer=input(f"Do you know the answer? [y/n]: ").lower()
 
-    while answer not in ("y","n"):
-        answer=input("Type 'y' or 'n': ").lower()
+        while answer not in ("y","n"):
+            answer=input("Type 'y' or 'n': ").lower()
 
-        if answer=="n":
-            learning_pile.append(card)
+            if answer=="n":
+                learning_pile.append(card)
 
     print("\nWow! You've repeated every flashcard.")
 
