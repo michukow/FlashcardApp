@@ -230,7 +230,47 @@ def learn_mode():
             if answer=="n":
                 learning_pile.append(card)
 
+    try:
+        with open("streak.json","r",encoding="utf-8") as file:
+            streak_data=json.load(file)
+
+        if not streak_data:
+            print("No flashcard yet.")
+            return
+
+        streak=streak_data["streak"]
+        streak_date=streak_data["streak_date"]
+
+    except FileNotFoundError:
+        print("File not found.")
+        streak=0
+        streak_date=None
+
+    today=datetime.today().date()
+
+    if streak_date:
+        diff=(today-datetime.strptime(streak_date,"%Y-%m-%d").date()).days
+
+        if diff==1:
+            streak+=1   
+        elif diff==0:
+            pass               
+        else:
+            streak=1
+    else:
+        streak=1
+
+    with open("streak.json","w",encoding="utf-8") as file:
+        json.dump(
+            {
+                "streak":streak,
+                "streak_date":today.strftime("%Y-%m-%d")
+            },
+            file,indent=4,ensure_ascii=False
+        )
+
     print("\nWow! You've repeated every flashcard.")
+    print(f"Current streak: {streak}")
 
 def main():
     while True:
