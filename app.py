@@ -43,6 +43,7 @@ def add_flashcard():
 
     except FileNotFoundError:
         print("File not found.")
+        data=[]
 
     data.append(flashcard.to_dict())
 
@@ -61,11 +62,11 @@ def show_all():
 
             print("Showing all your flashcards...")
             for i,f in enumerate(data,start=1):
-                flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
-                print(f"{i}. {f["side1"]} - {f["side2"]}")
+                print(f"{i}. {f['side1']} - {f['side2']}")
 
     except FileNotFoundError:
         print("File not found.")
+        data=[]
 
 def delete():
     try:
@@ -77,8 +78,7 @@ def delete():
             return
 
         for i,f in enumerate(data,start=1):
-            flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
-            print(f"{i}. {f["side1"]} - {f["side2"]}")
+            print(f"{i}. {f['side1']} - {f['side2']}")
 
         while True:
             try:
@@ -99,6 +99,7 @@ def delete():
 
     except FileNotFoundError:
         print("File not found.")
+        data=[]
 
 def update():
     try:
@@ -110,8 +111,7 @@ def update():
             return
 
         for i,f in enumerate(data,start=1):
-            flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
-            print(f"{i}. {f["side1"]} - {f["side2"]}")
+            print(f"{i}. {f['side1']} - {f['side2']}")
             
 
         while True:
@@ -152,6 +152,7 @@ def update():
 
     except FileNotFoundError:
         print("File not found.")   
+        data=[]
 
 def exam_mode():
     good=0
@@ -168,12 +169,12 @@ def exam_mode():
                 return
 
             for f in data:
-                flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
                 flashcards_exam[f["side1"]]=f["side2"]
                 max_flashcards=len(flashcards_exam)
 
     except FileNotFoundError:
         print("File not found.")
+        data=[]
 
     while flashcards_exam:
         side1,side2=random.choice(list(flashcards_exam.items()))
@@ -210,6 +211,7 @@ def learn_mode():
 
     except FileNotFoundError:
         print("File not found.")
+        data=[]
 
     while learning_pile:
 
@@ -217,7 +219,7 @@ def learn_mode():
         side1=card.side1
         side2=card.side2
 
-        print(f"\n{side1}")
+        print(f"{side1}")
         input("Press ENTER to show answer...")
 
         print(f"{side2}")
@@ -229,6 +231,7 @@ def learn_mode():
 
             if answer=="n":
                 learning_pile.append(card)
+        print()
 
     try:
         with open("streak.json","r",encoding="utf-8") as file:
@@ -243,6 +246,7 @@ def learn_mode():
 
     except FileNotFoundError:
         print("File not found.")
+        data=[]
         streak=0
         streak_date=None
 
