@@ -3,11 +3,10 @@ import random
 from datetime import datetime
 
 class Flashcard:
-    def __init__(self,side1,side2,date,learned="n"):
+    def __init__(self,side1,side2,date):
         self.side1=side1
         self.side2=side2
         self.date=date
-        self.learned=learned
 
     def to_dict(self):
         return self.__dict__
@@ -206,7 +205,7 @@ def learn_mode():
                 return
 
             for f in data:
-                flashcard=Flashcard(f["side1"],f["side2"],f["date"],f["learned"])
+                flashcard=Flashcard(f["side1"],f["side2"],f["date"])
                 learning_pile.append(flashcard)
 
     except FileNotFoundError:
