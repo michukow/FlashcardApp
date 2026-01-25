@@ -159,6 +159,7 @@ def exam_mode():
     motivation_good=["Well done!","Just do it!", "You've got this!","Congratulation!","Good job!"]
     motivation_bad=["Bad!","Remember this!","Error!","Nice try!","Repeat that!"]
     flashcards_exam={}
+    
     try:
         with open("flashcard.json","r",encoding="utf-8") as file:
             data=json.load(file)
